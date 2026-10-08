@@ -8,20 +8,13 @@ import EmployeeDashboard from './views/EmployeeDashboard';
 import {
   Sparkles,
   Info,
-  ChevronDown,
-  ChevronUp,
-  Zap,
-  ArrowRight,
-  CheckCircle,
-  HelpCircle,
-  Check
+  CheckCircle
 } from 'lucide-react';
 
 function AppContent() {
   const { user, loading } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [guideOpen, setGuideOpen] = useState(false); // Collapsed by default so dashboard takes full view!
   const [dataRefreshKey, setDataRefreshKey] = useState(0);
   const [toast, setToast] = useState(null);
 
@@ -88,67 +81,6 @@ function AppContent() {
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         
-        {/* Hackathon 3-Minute Live Demo Flow Guide (Collapsible) */}
-        <div className="rounded-2xl bg-gradient-to-r from-indigo-950/60 via-slate-900 to-cyan-950/40 border border-indigo-500/30 p-3.5 sm:p-4 shadow-lg backdrop-blur text-xs transition-all">
-          <div className="flex items-center justify-between cursor-pointer" onClick={() => setGuideOpen(!guideOpen)}>
-            <div className="flex items-center space-x-2 text-indigo-300 font-bold">
-              <Zap className="w-4 h-4 text-cyan-400" />
-              <span>Hackathon 3-Minute Presentation Playbook</span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-semibold">
-                {guideOpen ? 'Click to minimize' : 'Click to view 4-step script'}
-              </span>
-            </div>
-            <button className="text-slate-400 hover:text-white p-1 text-xs flex items-center space-x-1">
-              <span className="text-[11px] font-medium hidden sm:inline">{guideOpen ? 'Hide' : 'Show'}</span>
-              {guideOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </button>
-          </div>
-
-          {guideOpen && (
-            <div className="mt-3 pt-3 border-t border-indigo-500/20 grid grid-cols-1 md:grid-cols-4 gap-3 text-slate-300 animate-in fade-in duration-200">
-              <div className="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
-                <div className="font-bold text-white flex items-center space-x-1.5 mb-1">
-                  <span className="w-4 h-4 rounded-full bg-indigo-500 text-[10px] flex items-center justify-center text-white">1</span>
-                  <span>View Milestone</span>
-                </div>
-                <p className="text-[11px] text-slate-400">
-                  As Intern Alex, open <strong>"Build Employee REST API"</strong> (Week 2).
-                </p>
-              </div>
-
-              <div className="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
-                <div className="font-bold text-white flex items-center space-x-1.5 mb-1">
-                  <span className="w-4 h-4 rounded-full bg-indigo-500 text-[10px] flex items-center justify-center text-white">2</span>
-                  <span>Submit v1 (Fails)</span>
-                </div>
-                <p className="text-[11px] text-slate-400">
-                  Click <em>Submit Work</em> → click <strong>"⚡ Load v1"</strong> → Submit. AI returns <strong>Score 72 (Needs Revision)</strong> with mentor issues.
-                </p>
-              </div>
-
-              <div className="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
-                <div className="font-bold text-white flex items-center space-x-1.5 mb-1">
-                  <span className="w-4 h-4 rounded-full bg-indigo-500 text-[10px] flex items-center justify-center text-white">3</span>
-                  <span>Resubmit v2 (Approved)</span>
-                </div>
-                <p className="text-[11px] text-slate-400">
-                  Click <em>Resubmit v2</em> → click <strong>"⚡ Load v2"</strong>. AI shows <strong>72 → 88 (+16 pts, Approved)</strong> with improvement comparison!
-                </p>
-              </div>
-
-              <div className="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
-                <div className="font-bold text-white flex items-center space-x-1.5 mb-1">
-                  <span className="w-4 h-4 rounded-full bg-indigo-500 text-[10px] flex items-center justify-center text-white">4</span>
-                  <span>Manager Approval</span>
-                </div>
-                <p className="text-[11px] text-slate-400">
-                  Click top bar <em>"Switch to Manager"</em> to inspect submissions, audit timeline, and program progress.
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-
         {/* Dynamic Role Views */}
         {isManager ? (
           <ManagerDashboard
