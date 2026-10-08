@@ -18,14 +18,17 @@ import {
   Calendar,
   Sparkles,
   Layers,
-  ChevronRight
+  ChevronRight,
+  Bell,
+  Zap
 } from 'lucide-react';
 
-export default function ManagerDashboard({ onOpenNotifications }) {
+export default function ManagerDashboard({ onOpenNotifications, showToast }) {
   const [metrics, setMetrics] = useState(null);
   const [progress, setProgress] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [reminderLoading, setReminderLoading] = useState(false);
   
   // Filters & Search
   const [filterStatus, setFilterStatus] = useState('ALL');
@@ -34,6 +37,23 @@ export default function ManagerDashboard({ onOpenNotifications }) {
   // Modals
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
+
+  const handleTriggerReminders = async () => {
+    setReminderLoading(true);
+    try {
+      const res = await api.triggerReminders();
+      loadData();
+      if (showToast) {
+        showToast(`Automated reminder check: ${res.reminders_dispatched_count} repeat reminder(s) dispatched via Email & SMS!`);
+      } else {
+        alert(`Dispatched ${res.reminders_dispatched_count} repeat reminders across channels.`);
+      }
+    } catch (e) {
+      alert('Error triggering reminders: ' + e.message);
+    } finally {
+      setReminderLoading(false);
+    }
+  };
 
   useEffect(() => {
     loadData();
@@ -122,6 +142,36 @@ export default function ManagerDashboard({ onOpenNotifications }) {
           icon={TrendingUp}
           color="purple"
         />
+      </div>
+
+      {/* 2.5 Automated Repeating Review & Reminder Engine (Active Automation) */}
+      <div className="bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border border-indigo-500/30 rounded-2xl p-4 sm:p-5 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="flex items-start sm:items-center space-x-3.5">
+          <div className="p-2.5 rounded-xl bg-indigo-500/10 text-cyan-400 border border-indigo-500/20 shrink-0">
+            <RotateCcw className={`w-5 h-5 ${reminderLoading ? 'animate-spin' : ''}`} />
+          </div>
+          <div>
+            <div className="flex items-center space-x-2">
+              <h4 className="text-sm font-bold text-white">Automated Repeating Review & Reminder Engine</h4>
+              <span className="flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Active</span>
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 mt-0.5">
+              Automatically checks tasks in <span className="text-amber-400 font-semibold">Needs Revision</span> or <span className="text-blue-400 font-semibold">Pending</span> and sends repeating follow-ups via <strong className="text-slate-100">Email & SMS</strong> until approved.
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={handleTriggerReminders}
+          disabled={reminderLoading}
+          className="flex items-center justify-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white shadow-md shadow-indigo-600/30 transition active:scale-95 whitespace-nowrap disabled:opacity-50"
+        >
+          <Bell className="w-4 h-4" />
+          <span>{reminderLoading ? 'Scanning & Sending...' : 'Trigger Auto-Reminders Now'}</span>
+        </button>
       </div>
 
       {/* 3. Task Management Section */}

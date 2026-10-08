@@ -302,3 +302,15 @@ def get_program_progress(db: Session = Depends(get_db)):
         average_review_score=round(float(avg_score), 1),
         current_week=2
     )
+
+@router.post("/reminders/trigger")
+def trigger_automated_reminders(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Executes an automated recurring reminder scan:
+    Sends repeat Email, SMS, and In-App notifications for all tasks awaiting revision or pending submission.
+    """
+    result = notification_service.check_and_send_repeating_reminders(db)
+    return result

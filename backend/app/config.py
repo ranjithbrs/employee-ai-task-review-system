@@ -32,8 +32,24 @@ class Settings:
     MAX_FILE_SIZE_MB: int = int(os.getenv("MAX_FILE_SIZE_MB", "15"))
     ALLOWED_EXTENSIONS: list[str] = [".pdf", ".docx", ".txt", ".md", ".zip"]
     
-    # Notification & Mock modes
+    # Notification & Multi-Channel Delivery modes
     SMS_DEMO_MODE: bool = True
     EMAIL_DEMO_MODE: bool = True
+
+    # Outbound Email (SMTP Configuration - Optional)
+    SMTP_HOST: str = os.getenv("SMTP_HOST", "")
+    SMTP_PORT: int = int(os.getenv("SMTP_PORT", "587"))
+    SMTP_USER: str = os.getenv("SMTP_USER", "")
+    SMTP_PASSWORD: str = os.getenv("SMTP_PASSWORD", "")
+    SMTP_FROM_EMAIL: str = os.getenv("SMTP_FROM_EMAIL", "mentor-ai@company.com")
+
+    # Outbound SMS (Twilio Configuration - Optional)
+    TWILIO_ACCOUNT_SID: str = os.getenv("TWILIO_ACCOUNT_SID", "")
+    TWILIO_AUTH_TOKEN: str = os.getenv("TWILIO_AUTH_TOKEN", "")
+    TWILIO_FROM_PHONE: str = os.getenv("TWILIO_FROM_PHONE", "")
+
+    # Automated Repeating Reminder Engine
+    AUTO_REMINDER_INTERVAL_MINUTES: int = int(os.getenv("AUTO_REMINDER_INTERVAL_MINUTES", "10"))
+    AUTO_REMINDER_ENABLED: bool = os.getenv("AUTO_REMINDER_ENABLED", "True").lower() in ("true", "1", "yes")
 
 settings = Settings()

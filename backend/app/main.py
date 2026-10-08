@@ -1,4 +1,5 @@
 import logging
+import asyncio
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,9 +9,29 @@ from app.config import settings, SAMPLE_DIR, UPLOAD_DIR
 from app.database import engine, Base, SessionLocal
 from app.routers import auth_router, task_router, submission_router, notification_router
 from app.services.seed_service import seed_database
+from app.services.notification_service import notification_service
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("task_review_system")
+
+async def reminder_background_loop():
+    """Periodically executes automated recurring reminder scans in the background."""
+    while True:
+        try:
+            await asyncio.sleep(settings.AUTO_REMINDER_INTERVAL_MINUTES * 60)
+            if settings.AUTO_REMINDER_ENABLED:
+                logger.info("Executing periodic automated reminder check...")
+                db = SessionLocal()
+                try:
+                    res = notification_service.check_and_send_repeating_reminders(db)
+                    logger.info(f"Automated reminder check complete: {res.get('reminders_dispatched_count', 0)} dispatched.")
+                finally:
+                    db.close()
+        except asyncio.CancelledError:
+            break
+        except Exception as e:
+            logger.warning(f"Error in background reminder loop: {e}")
+            await asyncio.sleep(60)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -24,8 +45,14 @@ async def lifespan(app: FastAPI):
         logger.info("Demo data verified.")
     finally:
         db.close()
+
+    # Start background reminder loop
+    reminder_task = asyncio.create_task(reminder_background_loop())
+
     yield
+
     # Shutdown
+    reminder_task.cancel()
     logger.info("Application shutting down.")
 
 app = FastAPI(

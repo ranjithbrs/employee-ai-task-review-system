@@ -147,6 +147,13 @@ export const api = {
     });
   },
 
+  // Automated Repeating Reminders
+  async triggerReminders() {
+    return request('/tasks/reminders/trigger', {
+      method: 'POST',
+    });
+  },
+
   getSampleFileUrl(filename) {
     return `${API_BASE}/sample-files/${filename}`;
   },
