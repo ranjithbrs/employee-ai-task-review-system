@@ -77,7 +77,7 @@ export default function Navbar({ onOpenNotifications, unreadCount, onDataRefresh
                   Sample Submission Files
                 </div>
                 <a
-                  href="/api/sample-files/employee_api_v1_incomplete.pdf"
+                  href={api.getSampleFileUrl('employee_api_v1_incomplete.pdf')}
                   download="employee_api_v1_incomplete.pdf"
                   className="flex items-center px-3 py-2 text-slate-200 hover:bg-slate-700/60 transition group"
                 >
@@ -88,7 +88,7 @@ export default function Navbar({ onOpenNotifications, unreadCount, onDataRefresh
                   </div>
                 </a>
                 <a
-                  href="/api/sample-files/employee_api_v2_improved.pdf"
+                  href={api.getSampleFileUrl('employee_api_v2_improved.pdf')}
                   download="employee_api_v2_improved.pdf"
                   className="flex items-center px-3 py-2 text-slate-200 hover:bg-slate-700/60 transition group"
                 >
@@ -99,7 +99,7 @@ export default function Navbar({ onOpenNotifications, unreadCount, onDataRefresh
                   </div>
                 </a>
                 <a
-                  href="/api/sample-files/employee_api_v1_code.zip"
+                  href={api.getSampleFileUrl('employee_api_v1_code.zip')}
                   download="employee_api_v1_code.zip"
                   className="flex items-center px-3 py-2 text-slate-200 hover:bg-slate-700/60 transition"
                 >
@@ -110,7 +110,7 @@ export default function Navbar({ onOpenNotifications, unreadCount, onDataRefresh
                   </div>
                 </a>
                 <a
-                  href="/api/sample-files/employee_api_v2_code.zip"
+                  href={api.getSampleFileUrl('employee_api_v2_code.zip')}
                   download="employee_api_v2_code.zip"
                   className="flex items-center px-3 py-2 text-slate-200 hover:bg-slate-700/60 transition"
                 >

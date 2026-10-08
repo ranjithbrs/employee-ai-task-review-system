@@ -34,7 +34,7 @@ export default function SubmissionUploadModal({ task, isOpen, onClose, onSuccess
       setLoading(true);
       setError(null);
       // Fetch the sample v1 file from backend
-      const resp = await fetch('/api/sample-files/employee_api_v1_incomplete.pdf');
+      const resp = await fetch(api.getSampleFileUrl('employee_api_v1_incomplete.pdf'));
       const blob = await resp.blob();
       const testFile = new File([blob], 'employee_api_v1_incomplete.pdf', { type: 'application/pdf' });
       setSelectedFile(testFile);
@@ -52,7 +52,7 @@ export default function SubmissionUploadModal({ task, isOpen, onClose, onSuccess
       setLoading(true);
       setError(null);
       // Fetch the sample v2 file from backend
-      const resp = await fetch('/api/sample-files/employee_api_v2_improved.pdf');
+      const resp = await fetch(api.getSampleFileUrl('employee_api_v2_improved.pdf'));
       const blob = await resp.blob();
       const testFile = new File([blob], 'employee_api_v2_improved.pdf', { type: 'application/pdf' });
       setSelectedFile(testFile);
