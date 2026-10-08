@@ -103,7 +103,7 @@ export default function TaskDetailModal({ taskId, isOpen, onClose, onRefresh, is
               <div className="flex items-center space-x-3 text-xs text-slate-400 mt-0.5">
                 <span>Assignee: <strong className="text-slate-300">{task?.intern?.name || 'Intern'}</strong></span>
                 <span>•</span>
-                <span>Deadline: <strong className="text-slate-300">{task?.deadline ? new Date(task.deadline).toLocaleDateString() : 'N/A'}</strong></span>
+                <span>Deadline: <strong className="text-slate-300">{task?.deadline ? new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A'}</strong></span>
               </div>
             </div>
           </div>
@@ -193,7 +193,7 @@ export default function TaskDetailModal({ taskId, isOpen, onClose, onRefresh, is
                         <div className="flex items-center justify-between text-xs text-slate-400 bg-slate-800/40 px-3 py-2 rounded-lg border border-slate-700/40">
                           <div>
                             <strong>File:</strong> {currentSubmission.file_name} •{' '}
-                            <span>Submitted: {new Date(currentSubmission.submitted_at).toLocaleString()}</span>
+                            <span>Submitted: {new Date(currentSubmission.submitted_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                           </div>
                           {currentSubmission.repo_link && (
                             <a

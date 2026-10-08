@@ -174,7 +174,7 @@ export default function EmployeeDashboard({ onOpenNotifications }) {
                     <div className="flex items-center justify-between pt-1 border-t border-slate-750 text-[11px]">
                       <span className="text-slate-400 flex items-center space-x-1">
                         <Calendar className="w-3 h-3 text-slate-400" />
-                        <span>Deadline: {new Date(task.deadline).toLocaleDateString()}</span>
+                        <span>Deadline: {new Date(task.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                       </span>
 
                       {task.latest_score !== null && task.latest_score !== undefined ? (

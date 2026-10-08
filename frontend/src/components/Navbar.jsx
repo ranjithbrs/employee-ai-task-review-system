@@ -13,17 +13,18 @@ import {
   FileText
 } from 'lucide-react';
 
-export default function Navbar({ onOpenNotifications, unreadCount, onDataRefresh }) {
+export default function Navbar({ onOpenNotifications, unreadCount, onDataRefresh, showToast }) {
   const { user, switchRole } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [reseedLoading, setReseedLoading] = useState(false);
 
   const handleReseed = async () => {
-    if (!window.confirm('Reset demo data to initial state?')) return;
+    if (!window.confirm('Reset demo data to initial state for next presentation?')) return;
     setReseedLoading(true);
     try {
       await api.reseedData();
       if (onDataRefresh) onDataRefresh();
+      if (showToast) showToast('Demo data reset to initial state! Ready for next judge.');
     } catch (err) {
       alert('Error resetting demo: ' + err.message);
     } finally {
@@ -128,10 +129,11 @@ export default function Navbar({ onOpenNotifications, unreadCount, onDataRefresh
           <button
             onClick={handleReseed}
             disabled={reseedLoading}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition"
-            title="Reset demo data to initial state"
+            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition"
+            title="Reset demo data to initial state for next judge"
           >
-            <RotateCcw className={`w-4 h-4 ${reseedLoading ? 'animate-spin text-indigo-400' : ''}`} />
+            <RotateCcw className={`w-3.5 h-3.5 ${reseedLoading ? 'animate-spin text-cyan-400' : 'text-slate-400'}`} />
+            <span className="hidden sm:inline">Reset Demo</span>
           </button>
 
           {/* Notifications Bell */}

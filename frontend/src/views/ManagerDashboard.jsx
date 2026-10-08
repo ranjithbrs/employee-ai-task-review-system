@@ -213,7 +213,7 @@ export default function ManagerDashboard({ onOpenNotifications }) {
                       {t.intern?.name || 'Alex Chen'}
                     </td>
                     <td className="py-3.5 px-4 text-slate-400 whitespace-nowrap">
-                      {new Date(t.deadline).toLocaleDateString()}
+                      {new Date(t.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </td>
                     <td className="py-3.5 px-4 whitespace-nowrap">
                       {getStatusBadge(t.status)}

@@ -13,15 +13,24 @@ import {
   Zap,
   ArrowRight,
   CheckCircle,
-  HelpCircle
+  HelpCircle,
+  Check
 } from 'lucide-react';
 
 function AppContent() {
   const { user, loading } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [guideOpen, setGuideOpen] = useState(true);
+  const [guideOpen, setGuideOpen] = useState(false); // Collapsed by default so dashboard takes full view!
   const [dataRefreshKey, setDataRefreshKey] = useState(0);
+  const [toast, setToast] = useState(null);
+
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => {
+      setToast(null);
+    }, 3500);
+  };
 
   const fetchNotifications = async () => {
     if (!user) return;
@@ -54,35 +63,49 @@ function AppContent() {
   const unreadCount = notifications.filter((n) => n.status === 'UNREAD').length;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans relative">
       
+      {/* Toast Notification */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="flex items-center space-x-2 px-4 py-3 rounded-xl bg-slate-800 border border-emerald-500/50 shadow-2xl shadow-emerald-500/20 text-xs font-semibold text-white">
+            <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+              <Check className="w-3.5 h-3.5" />
+            </div>
+            <span>{toast.message}</span>
+          </div>
+        </div>
+      )}
+
       {/* Navigation Header */}
       <Navbar
         onOpenNotifications={() => setIsNotificationsOpen(true)}
         unreadCount={unreadCount}
         onDataRefresh={() => setDataRefreshKey((k) => k + 1)}
+        showToast={showToast}
       />
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         
-        {/* Hackathon 3-Minute Live Demo Flow Guide */}
-        <div className="rounded-2xl bg-gradient-to-r from-indigo-950/60 via-slate-900 to-cyan-950/40 border border-indigo-500/30 p-4 shadow-lg backdrop-blur text-xs">
+        {/* Hackathon 3-Minute Live Demo Flow Guide (Collapsible) */}
+        <div className="rounded-2xl bg-gradient-to-r from-indigo-950/60 via-slate-900 to-cyan-950/40 border border-indigo-500/30 p-3.5 sm:p-4 shadow-lg backdrop-blur text-xs transition-all">
           <div className="flex items-center justify-between cursor-pointer" onClick={() => setGuideOpen(!guideOpen)}>
             <div className="flex items-center space-x-2 text-indigo-300 font-bold">
               <Zap className="w-4 h-4 text-cyan-400" />
-              <span>Hackathon 3-Minute Demo Playbook</span>
+              <span>Hackathon 3-Minute Presentation Playbook</span>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-semibold">
-                Instant Step-by-Step
+                {guideOpen ? 'Click to minimize' : 'Click to view 4-step script'}
               </span>
             </div>
-            <button className="text-slate-400 hover:text-white p-1">
+            <button className="text-slate-400 hover:text-white p-1 text-xs flex items-center space-x-1">
+              <span className="text-[11px] font-medium hidden sm:inline">{guideOpen ? 'Hide' : 'Show'}</span>
               {guideOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
           </div>
 
           {guideOpen && (
-            <div className="mt-3 pt-3 border-t border-indigo-500/20 grid grid-cols-1 md:grid-cols-4 gap-3 text-slate-300">
+            <div className="mt-3 pt-3 border-t border-indigo-500/20 grid grid-cols-1 md:grid-cols-4 gap-3 text-slate-300 animate-in fade-in duration-200">
               <div className="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800">
                 <div className="font-bold text-white flex items-center space-x-1.5 mb-1">
                   <span className="w-4 h-4 rounded-full bg-indigo-500 text-[10px] flex items-center justify-center text-white">1</span>
@@ -131,11 +154,13 @@ function AppContent() {
           <ManagerDashboard
             key={`mgr-${dataRefreshKey}`}
             onOpenNotifications={() => setIsNotificationsOpen(true)}
+            showToast={showToast}
           />
         ) : (
           <EmployeeDashboard
             key={`emp-${dataRefreshKey}`}
             onOpenNotifications={() => setIsNotificationsOpen(true)}
+            showToast={showToast}
           />
         )}
 
