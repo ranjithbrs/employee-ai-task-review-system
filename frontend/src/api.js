@@ -1,4 +1,5 @@
-const BACKEND_URL = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+const rawUrl = (import.meta.env.VITE_API_URL || '').trim().replace(/\/$/, '');
+const BACKEND_URL = rawUrl ? (rawUrl.startsWith('http') ? rawUrl : `https://${rawUrl}`) : '';
 const API_BASE = `${BACKEND_URL}/api`;
 
 export const getAuthToken = () => localStorage.getItem('token');
