@@ -50,6 +50,16 @@ app.include_router(task_router.router, prefix="/api")
 app.include_router(submission_router.router, prefix="/api")
 app.include_router(notification_router.router, prefix="/api")
 
+@app.get("/")
+def root():
+    return {
+        "app": settings.PROJECT_NAME,
+        "status": "online",
+        "docs_url": "/docs",
+        "health_url": "/api/health",
+        "message": "MentorAI API is running. Access interactive docs at /docs"
+    }
+
 @app.get("/api/health")
 def health_check():
     return {
