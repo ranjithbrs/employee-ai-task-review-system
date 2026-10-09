@@ -65,7 +65,7 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In development/hackathon, allow all frontend ports
+    allow_origins=["*"], # In development, allow all frontend ports
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

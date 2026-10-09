@@ -28,7 +28,7 @@ export default function SubmissionUploadModal({ task, isOpen, onClose, onSuccess
 
   const currentVersion = (task.submissions?.length || 0) + 1;
 
-  // 1-Click Fast Fill Helpers for Hackathon Demo
+  // 1-Click Fast Fill Helpers for Sample Testing
   const handleQuickFillV1 = async () => {
     try {
       setLoading(true);
@@ -79,7 +79,7 @@ export default function SubmissionUploadModal({ task, isOpen, onClose, onSuccess
     setLoading(true);
     setError(null);
 
-    // Multi-step animated progress simulation for hackathon presentation impact
+    // Multi-step animated progress simulation for real-time review feedback
     setProgressStep(1);
     await new Promise(r => setTimeout(r, 600));
     setProgressStep(2);
@@ -136,7 +136,7 @@ export default function SubmissionUploadModal({ task, isOpen, onClose, onSuccess
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-1.5 text-xs font-bold text-indigo-300">
                 <Zap className="w-4 h-4 text-cyan-400" />
-                <span>Instant Hackathon Demo Auto-Fill:</span>
+                <span>Instant Sample Deliverable Loaders:</span>
               </div>
               <span className="text-[10px] text-slate-400 font-medium">Click to pre-fill test files</span>
             </div>

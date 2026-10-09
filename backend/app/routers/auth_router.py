@@ -24,7 +24,7 @@ def get_profile(current_user: User = Depends(get_current_user)):
 
 @router.post("/demo-switch/{role}", response_model=TokenResponse)
 def demo_switch_account(role: str, db: Session = Depends(get_db)):
-    """Fast shortcut for hackathon judges to switch between Manager and Intern."""
+    """Fast shortcut for testing and evaluation to switch between Manager and Intern."""
     role_norm = role.upper()
     if role_norm not in ["MANAGER", "INTERN"]:
         raise HTTPException(status_code=400, detail="Role must be MANAGER or INTERN")

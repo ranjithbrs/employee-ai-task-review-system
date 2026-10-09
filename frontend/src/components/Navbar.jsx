@@ -19,12 +19,12 @@ export default function Navbar({ onOpenNotifications, unreadCount, onDataRefresh
   const [reseedLoading, setReseedLoading] = useState(false);
 
   const handleReseed = async () => {
-    if (!window.confirm('Reset demo data to initial state for next presentation?')) return;
+    if (!window.confirm('Reset prototype data to clean initial state?')) return;
     setReseedLoading(true);
     try {
       await api.reseedData();
       if (onDataRefresh) onDataRefresh();
-      if (showToast) showToast('Demo data reset to initial state! Ready for next judge.');
+      if (showToast) showToast('Data reset to initial clean state.');
     } catch (err) {
       alert('Error resetting demo: ' + err.message);
     } finally {
@@ -130,10 +130,10 @@ export default function Navbar({ onOpenNotifications, unreadCount, onDataRefresh
             onClick={handleReseed}
             disabled={reseedLoading}
             className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition"
-            title="Reset demo data to initial state for next judge"
+            title="Reset database to initial state"
           >
             <RotateCcw className={`w-3.5 h-3.5 ${reseedLoading ? 'animate-spin text-cyan-400' : 'text-slate-400'}`} />
-            <span className="hidden sm:inline">Reset Demo</span>
+            <span className="hidden sm:inline">Reset Data</span>
           </button>
 
           {/* Notifications Bell */}

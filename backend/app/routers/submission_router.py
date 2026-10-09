@@ -181,7 +181,7 @@ async def submit_task_work(
 
 @router.get("/sample-files/{filename}")
 def download_sample_file(filename: str):
-    """Provides downloadable test files so judges can test uploads in seconds."""
+    """Provides downloadable test files for sample deliverables testing."""
     safe_name = Path(filename).name
     file_path = SAMPLE_DIR / safe_name
     if not file_path.exists():
@@ -192,6 +192,6 @@ def download_sample_file(filename: str):
 
 @router.post("/admin/reseed")
 def reseed_demo(db: Session = Depends(get_db)):
-    """Resets the database back to clean hackathon demo state."""
+    """Resets the database back to clean initial state."""
     res = seed_database(db)
     return {"message": "Demo data successfully reseeded", "details": res}
