@@ -3,9 +3,18 @@
 [![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688.svg)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB.svg)](https://react.dev)
 [![Tailwind CSS](https://img.shields.io/badge/UI-Tailwind%20CSS%20v4-38B2AC.svg)](https://tailwindcss.com)
-[![AI Engine](https://img.shields.io/badge/AI-Google%20Gemini%20%2B%20Mentor%20Engine-8E75C4.svg)](https://ai.google.dev/)
+[![Deployment](https://img.shields.io/badge/Live%20Frontend-Vercel-black.svg)](https://employee-ai-task-review-system.vercel.app)
+[![API Status](https://img.shields.io/badge/Live%20Backend-Render-46E3B7.svg)](https://employee-ai-task-review-system.onrender.com)
 
-An intelligent, continuous task review platform designed for organizations running month-long or multi-week internship programs. Rather than simply acting as a passive checker or vague chatbot, the system functions like an **experienced engineering mentor** that evaluates submitted code/documents, identifies evidence-based strengths and issues, calculates improvement between versions, and keeps the manager firmly in control as the final authority.
+An intelligent, continuous task review platform designed for organizations running month-long or multi-week internship programs. Rather than simply acting as a passive checker or vague chatbot, the system functions like an **experienced engineering mentor** that evaluates submitted code/documents, identifies evidence-based strengths and issues, calculates improvement between versions, dispatches automated multi-channel follow-ups, and keeps the manager firmly in control as the final authority.
+
+---
+
+## 🌐 Live Production Deployments
+
+- 🚀 **Live Web Application (Vercel)**: **[https://employee-ai-task-review-system.vercel.app](https://employee-ai-task-review-system.vercel.app)**
+- ⚙️ **Live Backend REST API (Render)**: **[https://employee-ai-task-review-system.onrender.com](https://employee-ai-task-review-system.onrender.com)**
+- 📖 **Interactive Swagger API Docs**: **[https://employee-ai-task-review-system.onrender.com/docs](https://employee-ai-task-review-system.onrender.com/docs)**
 
 ---
 
@@ -21,6 +30,9 @@ Organizations assign milestone tasks to interns and junior employees over multi-
 - **AI Task Understanding**: Automatically synthesizes the objective, expected deliverable, and crucial evaluation guidelines.
 - **Human-Like Mentor Evaluation**: Generates evidence-based strengths, weaknesses, concrete issues, actionable suggestions, and a natural mentor feedback paragraph.
 - **⭐ Continuous Improvement Tracking (v1 → v2)**: Compares successive revisions, tracks score delta (`72 → 88, +16 pts`), and verifies whether previous issues were resolved.
+- **📊 Engineering Competency Rubric**: Evaluates key pillars (Validation, Architecture, REST Standards, Code Quality) with visual progress meters.
+- **🔁 Automated Repeating Reminder Engine**: Automatically scans incomplete or revision-pending tasks and repeats follow-up notifications (Email & SMS) until the task is completed and approved.
+- **📱 Multi-Channel Delivery & Device Simulators**: Full support for In-App, Email (SMTP), and SMS (Twilio) alerts, complete with interactive mobile smartphone and email client simulators in the UI!
 - **Human Authority**: AI assists the manager; if AI confidence drops below a configured threshold, the submission is flagged for **Human Review Required**, allowing managers to approve, request revisions, or override scores.
 
 ---
