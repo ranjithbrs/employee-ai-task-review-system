@@ -1,5 +1,6 @@
 import logging
 import asyncio
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -35,6 +36,10 @@ async def reminder_background_loop():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    if os.getenv("TESTING") == "1":
+        yield
+        return
+
     # Startup: ensure tables exist and seed demo data
     logger.info("Initializing database schema...")
     Base.metadata.create_all(bind=engine)

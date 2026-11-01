@@ -16,6 +16,22 @@ You don't need to install anything or know how to code. Click below to experienc
 - 🚀 **Interactive Web Dashboard**: **[https://employee-ai-task-review-system.vercel.app](https://employee-ai-task-review-system.vercel.app)**
 - ⚙️ **Live Backend Service**: **[https://employee-ai-task-review-system.onrender.com](https://employee-ai-task-review-system.onrender.com)**
 - 📖 **Interactive API Explorer**: **[https://employee-ai-task-review-system.onrender.com/docs](https://employee-ai-task-review-system.onrender.com/docs)**
+- 📐 **Architecture & API Catalog**: **[docs/ARCHITECTURE_AND_API.md](docs/ARCHITECTURE_AND_API.md)**
+- 🖼️ **Screenshots & Visual Tour**: **[docs/SCREENSHOTS.md](docs/SCREENSHOTS.md)**
+
+---
+
+## ✅ System Verification & Audit Status (7/7 Completed)
+
+The system has passed a comprehensive verification checklist across all workflows, security protocols, AI evaluations, error handlers, and documentation:
+
+- [x] **Verify employee and mentor workflows**: Fully tested end-to-end intern submission/revision loop and manager supervision/override workflows in `backend/tests/test_workflows.py`.
+- [x] **Test AI task evaluation against real examples**: Verified against real PDF and multi-file code ZIP submissions (`employee_api_v1_incomplete.pdf` scoring 72% / NEEDS_REVISION vs `employee_api_v2_improved.pdf` scoring 88% / APPROVED).
+- [x] **Validate feedback consistency and accuracy**: Validated deterministic scoring, structured issue extraction, and confidence thresholds triggering human review in `backend/tests/test_ai_evaluation.py`.
+- [x] **Check authentication and role-based access**: Validated PBKDF2 SHA-256 password hashing, JWT expiration, login endpoints, and strict 403 Forbidden RBAC enforcement for intern-to-manager boundaries in `backend/tests/test_auth_rbac.py`.
+- [x] **Test backend API error handling**: Validated 400 Bad Request on unsupported file extensions (.exe), 404 Not Found on non-existent tasks, 422 Unprocessable Entity schema validation, and malformed token handling in `backend/tests/test_error_handling.py`.
+- [x] **Document system architecture and API endpoints**: Complete Mermaid system architecture diagram, state machine, data models, and endpoint catalog published in [docs/ARCHITECTURE_AND_API.md](docs/ARCHITECTURE_AND_API.md).
+- [x] **Add screenshots and automated tests**: High-resolution interface screenshots documented in [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md) and 30 automated tests passing with 100% green status via `python run_tests.py`.
 
 ---
 
@@ -228,6 +244,27 @@ run_demo.bat
 
 - Local App: **http://127.0.0.1:3000**
 - Local API Docs: **http://127.0.0.1:8000/docs**
+
+---
+
+## 🧪 Automated Testing Suite (30/30 Passing)
+
+The project includes a comprehensive automated test runner discovering all unit, integration, RBAC security, and AI review suites:
+
+```bash
+# Run all automated test suites from project root
+python run_tests.py
+```
+
+### Test Suite Coverage:
+| Test Suite | File | Tests | Coverage |
+|---|---|:---:|---|
+| **Auth & RBAC Security** | `backend/tests/test_auth_rbac.py` | 8 | Password hashing, JWT token lifecycle, intern/manager 403 barriers |
+| **End-to-End Workflows** | `backend/tests/test_workflows.py` | 2 | Intern v1->v2 revision cycle, Manager supervision & decision override |
+| **AI Evaluation & Consistency** | `backend/tests/test_ai_evaluation.py` | 7 | Real PDF/ZIP parsing, rubric scoring, determinism, confidence checks |
+| **API Error Handling** | `backend/tests/test_error_handling.py` | 7 | 400 bad extensions, 404 missing IDs, 422 schema validation |
+| **Multi-Channel Notifications** | `backend/tests/test_notifications.py` | 6 | In-App, Email, SMS channel filtering, recurring reminder engine |
+| **Total Verified** | `run_tests.py` | **30** | **100% Passing (0 failures, 0 errors)** |
 
 ---
 

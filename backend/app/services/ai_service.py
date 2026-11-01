@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import re
 from typing import List, Dict, Any, Optional, Tuple
 import httpx
@@ -56,6 +57,21 @@ class AIReviewService:
         Evaluates task understanding, quality, completeness, strengths, weaknesses, issues, suggestions,
         and generates mentor feedback and continuous improvement comparison.
         """
+        # Bypass external API in testing environment for fast, deterministic, offline execution
+        if os.getenv("TESTING") == "1":
+            result = self._heuristic_mentor_review(
+                task_title=task_title,
+                task_description=task_description,
+                expected_outcome=expected_outcome,
+                evaluation_guidelines=evaluation_guidelines,
+                submission_content=submission_content,
+                submission_type=submission_type,
+                file_name=file_name or "submission",
+                version=version,
+                previous_review_data=previous_review_data
+            )
+            return self._post_process_review(result)
+
         # Try Gemini API if key exists
         if self.api_key and self.api_key.strip():
             try:

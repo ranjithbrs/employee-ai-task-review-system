@@ -304,6 +304,7 @@ def get_program_progress(db: Session = Depends(get_db)):
     )
 
 @router.post("/reminders/trigger")
+@router.post("/tasks/reminders/trigger")
 def trigger_automated_reminders(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
