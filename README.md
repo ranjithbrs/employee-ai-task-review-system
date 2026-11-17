@@ -31,7 +31,7 @@ The system has passed a comprehensive verification checklist across all workflow
 - [x] **Check authentication and role-based access**: Validated PBKDF2 SHA-256 password hashing, JWT expiration, login endpoints, and strict 403 Forbidden RBAC enforcement for intern-to-manager boundaries in `backend/tests/test_auth_rbac.py`.
 - [x] **Test backend API error handling**: Validated 400 Bad Request on unsupported file extensions (.exe), 404 Not Found on non-existent tasks, 422 Unprocessable Entity schema validation, and malformed token handling in `backend/tests/test_error_handling.py`.
 - [x] **Document system architecture and API endpoints**: Complete Mermaid system architecture diagram, state machine, data models, and endpoint catalog published in [docs/ARCHITECTURE_AND_API.md](docs/ARCHITECTURE_AND_API.md).
-- [x] **Add screenshots and automated tests**: High-resolution interface screenshots documented in [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md) and 30 automated tests passing with 100% green status via `python run_tests.py`.
+- [x] **Add screenshots and automated tests**: High-resolution interface screenshots documented in [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md) and 33 automated tests passing with 100% green status via `python run_tests.py`.
 
 ---
 
@@ -247,7 +247,7 @@ run_demo.bat
 
 ---
 
-## 🧪 Automated Testing Suite (30/30 Passing)
+## 🧪 Automated Testing Suite (33/33 Passing)
 
 The project includes a comprehensive automated test runner discovering all unit, integration, RBAC security, and AI review suites:
 
@@ -262,9 +262,9 @@ python run_tests.py
 | **Auth & RBAC Security** | `backend/tests/test_auth_rbac.py` | 8 | Password hashing, JWT token lifecycle, intern/manager 403 barriers |
 | **End-to-End Workflows** | `backend/tests/test_workflows.py` | 2 | Intern v1->v2 revision cycle, Manager supervision & decision override |
 | **AI Evaluation & Consistency** | `backend/tests/test_ai_evaluation.py` | 7 | Real PDF/ZIP parsing, rubric scoring, determinism, confidence checks |
-| **API Error Handling** | `backend/tests/test_error_handling.py` | 7 | 400 bad extensions, 404 missing IDs, 422 schema validation |
+| **API Error Handling & IDOR** | `backend/tests/test_error_handling.py` | 10 | 400 bad extensions, 404 missing IDs, 422 schema, IDOR 403, approval guard |
 | **Multi-Channel Notifications** | `backend/tests/test_notifications.py` | 6 | In-App, Email, SMS channel filtering, recurring reminder engine |
-| **Total Verified** | `run_tests.py` | **30** | **100% Passing (0 failures, 0 errors)** |
+| **Total Verified** | `run_tests.py` | **33** | **100% Passing (0 failures, 0 errors)** |
 
 ---
 

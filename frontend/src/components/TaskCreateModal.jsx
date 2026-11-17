@@ -10,7 +10,10 @@ export default function TaskCreateModal({ isOpen, onClose, onSuccess }) {
     '• Code quality & structure\n• Functionality & endpoints\n• Input validation & error handling\n• Documentation'
   );
   const [weekNumber, setWeekNumber] = useState(2);
-  const [deadline, setDeadline] = useState('2026-10-25T18:00');
+  const [deadline, setDeadline] = useState(() => {
+    const d = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    return d.toISOString().slice(0, 16);
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 

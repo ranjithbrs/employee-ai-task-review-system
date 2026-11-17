@@ -111,8 +111,6 @@ class AIReviewService:
             result.recommendation = "HUMAN_REVIEW_REQUIRED"
         elif result.score >= 85.0 and not result.issues:
             result.recommendation = "APPROVED"
-        elif result.score >= 85.0 and len(result.issues) <= 1:
-            result.recommendation = "APPROVED"
         else:
             result.recommendation = "NEEDS_REVISION"
         return result
@@ -204,8 +202,11 @@ Respond ONLY with valid JSON with this exact schema:
             resp = await client.post(url, json=payload)
             resp.raise_for_status()
             data = resp.json()
-            raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
-            parsed = json.loads(raw_text)
+            raw_text = data["candidates"][0]["content"]["parts"][0]["text"].strip()
+            # Strip markdown code fences if wrapped by Gemini
+            raw_text = re.sub(r"^```(?:json)?\s*", "", raw_text, flags=re.IGNORECASE)
+            raw_text = re.sub(r"\s*```$", "", raw_text)
+            parsed = json.loads(raw_text.strip())
 
             return AIReviewStructuredResult(
                 score=float(parsed.get("score", 75.0)),

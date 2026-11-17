@@ -37,6 +37,20 @@ async def submit_task_work(
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
 
+    # IDOR Security Check: Interns can only submit work for tasks assigned to them
+    if current_user.role == "INTERN" and task.intern_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied. You can only submit work for tasks assigned to you."
+        )
+
+    # Workflow Guard: Prevent re-submitting to an already approved task
+    if task.status == "APPROVED":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This task has already been approved and marked complete. No further submissions are required."
+        )
+
     # Determine previous submissions
     existing_subs = task.submissions
     version = len(existing_subs) + 1
@@ -99,10 +113,10 @@ async def submit_task_work(
     sub_status = ai_result.recommendation
     task.status = sub_status
 
-    # Create submission record
+    # Create submission record (attributed to assigned intern)
     new_sub = Submission(
         task_id=task.id,
-        intern_id=current_user.id,
+        intern_id=task.intern_id,
         version=version,
         submission_type=submission_type,
         file_name=file_name or (repo_link if repo_link else "Text Submission"),

@@ -138,6 +138,13 @@ def get_task_detail(
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
 
+    # IDOR Security Check: Interns can only view tasks assigned to them
+    if current_user.role == "INTERN" and task.intern_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied. You can only view tasks assigned to you."
+        )
+
     subs = task.submissions
     latest_sub = subs[0] if subs else None
     latest_score = latest_sub.ai_review.overall_score if (latest_sub and latest_sub.ai_review) else None
@@ -190,26 +197,37 @@ def manager_decision(
 
     if decision == "APPROVE":
         task.status = "APPROVED"
+        if task.submissions:
+            task.submissions[0].status = "APPROVED"
         event_title = "Manager Manual Approval"
         desc = f"Manager {current_user.name} approved the task. Comment: {payload.manager_comment}"
-        notification_service.notify_task_approved(db, task, intern, 95.0)
+        score_val = task.submissions[0].ai_review.overall_score if (task.submissions and task.submissions[0].ai_review) else 95.0
+        notification_service.notify_task_approved(db, task, intern, score_val)
 
     elif decision == "REQUEST_REVISION":
         task.status = "NEEDS_REVISION"
+        if task.submissions:
+            task.submissions[0].status = "NEEDS_REVISION"
         event_title = "Manager Requested Revision"
         desc = f"Manager {current_user.name} requested revision. Feedback: {payload.manager_comment}"
-        notification_service.notify_revision_requested(db, task, intern, 70.0, payload.manager_comment)
+        score_val = task.submissions[0].ai_review.overall_score if (task.submissions and task.submissions[0].ai_review) else 70.0
+        notification_service.notify_revision_requested(db, task, intern, score_val, payload.manager_comment)
 
     elif decision == "OVERRIDE_SCORE":
         if payload.override_score is None:
             raise HTTPException(status_code=400, detail="override_score is required for OVERRIDE_SCORE action")
+        if not task.submissions:
+            raise HTTPException(status_code=400, detail="Cannot override score on a task with no submissions.")
         event_title = f"Manager Overrode Score to {payload.override_score}"
         desc = f"Manager {current_user.name} adjusted score to {payload.override_score}. Reason: {payload.manager_comment}"
-        if task.submissions and task.submissions[0].ai_review:
+        if task.submissions[0].ai_review:
             task.submissions[0].ai_review.overall_score = payload.override_score
-            if payload.override_score >= 85:
-                task.status = "APPROVED"
-                task.submissions[0].status = "APPROVED"
+        if payload.override_score >= 85:
+            task.status = "APPROVED"
+            task.submissions[0].status = "APPROVED"
+        else:
+            task.status = "NEEDS_REVISION"
+            task.submissions[0].status = "NEEDS_REVISION"
 
     else:
         raise HTTPException(status_code=400, detail=f"Unknown decision type '{decision}'")
@@ -259,7 +277,7 @@ def get_intern_metrics(
     in_progress = db.query(Task).filter(Task.intern_id == intern_id, Task.status.in_(["PENDING_SUBMISSION", "UNDER_REVIEW"])).count()
     needs_revision = db.query(Task).filter(Task.intern_id == intern_id, Task.status == "NEEDS_REVISION").count()
     approved = db.query(Task).filter(Task.intern_id == intern_id, Task.status == "APPROVED").count()
-    now = datetime.now(timezone.utc)
+    now = datetime.now(timezone.utc).replace(tzinfo=None)
     overdue = db.query(Task).filter(Task.intern_id == intern_id, Task.deadline < now, Task.status != "APPROVED").count()
 
     # Calculate average score for intern's reviews
